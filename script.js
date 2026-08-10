@@ -52,6 +52,35 @@
     revealEls.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
+  // Contact form — fetch submit to Formspree
+  var form = document.getElementById('start-form');
+  var startCard = document.getElementById('start-card');
+  var startError = document.getElementById('start-error');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      startError.textContent = '';
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (res) {
+        if (res.ok) {
+          startCard.classList.add('submitted');
+        } else {
+          return res.json().then(function (data) {
+            throw new Error((data.errors || []).map(function (err) { return err.message; }).join(', ') || 'Submission failed.');
+          });
+        }
+      }).catch(function (err) {
+        startError.textContent = 'Something went wrong — please try again or email us directly.';
+        btn.disabled = false;
+      });
+    });
+  }
+
   // FAQ accordion (one open at a time)
   var faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach(function (item) {
