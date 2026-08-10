@@ -62,14 +62,4 @@
       if (!wasOpen) item.classList.add('open');
     });
   });
-
-  // Contact form
-  var form = document.getElementById('start-form');
-  var startCard = document.getElementById('start-card');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      startCard.classList.add('submitted');
-    });
-  }
 })();
